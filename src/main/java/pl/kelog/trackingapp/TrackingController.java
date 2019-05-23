@@ -30,4 +30,9 @@ public class TrackingController {
     public ResponseEntity<byte[]> list() {
         return new ResponseEntity<>(appService.listAll().getBytes(), HttpStatus.OK);
     }
+    
+    @RequestMapping(value = "/health", method = RequestMethod.GET)
+    public ResponseEntity<Void> health() {
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
