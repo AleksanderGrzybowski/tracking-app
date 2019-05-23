@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.jooq.lambda.Unchecked;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +14,18 @@ import java.nio.charset.Charset;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.stream.Collectors;
+
+import static java.util.Objects.requireNonNull;
 
 @Service
 @Slf4j
 public class TrackingInfoStorage {
     
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd__HH-mm-ss");
+    private static final String FILE_SEPARATOR = "\n-------------------------------------------------------\n";
     
     private final ObjectMapper mapper;
     private final String storagePath;
@@ -41,6 +48,16 @@ public class TrackingInfoStorage {
         
         log.info("Writing tracking info into new file " + outputFile.getAbsolutePath());
         mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, info);
+    }
+    
+    public String listAll() {
+        File[] files = new File(storagePath).listFiles((dir, name) -> name.endsWith(".json"));
+        requireNonNull(files);
+        
+        return Arrays.stream(files)
+                .sorted(Comparator.comparing(File::getName).reversed())
+                .map(Unchecked.function(file -> FileUtils.readFileToString(file, Charset.defaultCharset())))
+                .collect(Collectors.joining(FILE_SEPARATOR));
     }
     
     private String createFilename(LocalDateTime timestamp) {

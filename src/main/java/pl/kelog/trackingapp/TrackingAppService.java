@@ -15,9 +15,12 @@ public class TrackingAppService {
     private final TrackingInfoExtractor extractor;
     private final TrackingInfoStorage storage;
     
-    public void store(HttpServletRequest request) {
-    
+    void store(HttpServletRequest request) {
         TrackingInfo info = extractor.extract(request);
         storage.store(info);
+    }
+    
+    String listAll() {
+        return storage.listAll();
     }
 }

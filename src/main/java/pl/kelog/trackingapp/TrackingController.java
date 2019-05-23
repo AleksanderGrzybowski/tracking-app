@@ -20,9 +20,14 @@ public class TrackingController {
     
     private static final String FAKE_CSS = ".this-class-doesnt-exist {}";
     
-    @RequestMapping(value = "/extra.css", method = RequestMethod.GET, produces = "text/css")
+    @RequestMapping(value = "/api/extra.css", method = RequestMethod.GET, produces = "text/css")
     public ResponseEntity<byte[]> store(HttpServletRequest request) {
         appService.store(request);
         return new ResponseEntity<>(FAKE_CSS.getBytes(), HttpStatus.OK);
+    }
+    
+    @RequestMapping(value = "/api/list", method = RequestMethod.GET, produces = "text/plain")
+    public ResponseEntity<byte[]> list() {
+        return new ResponseEntity<>(appService.listAll().getBytes(), HttpStatus.OK);
     }
 }

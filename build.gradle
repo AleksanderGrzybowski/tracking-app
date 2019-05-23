@@ -20,4 +20,5 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 
 	compile group: 'commons-io', name: 'commons-io', version: '2.6'
+	compile 'org.jooq:jool-java-8:0.9.13'	
 }
