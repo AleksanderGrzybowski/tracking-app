@@ -32,11 +32,13 @@ public class TrackingInfoExtractor {
     
     private Map<String, String> extractHeaders(HttpServletRequest request) {
         Map<String, String> headers = new HashMap<>();
-        Enumeration<String> e = request.getHeaderNames();
-        while (e.hasMoreElements()) {
-            String key = e.nextElement();
-            headers.put(key, request.getHeader(key));
+        
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
+            headers.put(headerName, request.getHeader(headerName));
         }
+        
         return headers;
     }
 }
