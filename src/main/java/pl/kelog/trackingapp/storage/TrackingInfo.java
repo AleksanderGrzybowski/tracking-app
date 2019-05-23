@@ -1,11 +1,11 @@
 package pl.kelog.trackingapp.storage;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 
-@Data
+@AllArgsConstructor
 public class TrackingInfo {
     public final LocalDateTime timestamp;
     
