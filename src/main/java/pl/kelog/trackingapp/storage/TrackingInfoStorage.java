@@ -15,6 +15,8 @@ import java.time.format.DateTimeFormatter;
 @Slf4j
 public class TrackingInfoStorage {
     
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd__HH-mm-ss");
+    
     private final ObjectMapper mapper;
     private final String storagePath;
     
@@ -33,12 +35,13 @@ public class TrackingInfoStorage {
     public void store(TrackingInfo info) {
         String filename = createFilename(info.timestamp);
         File outputFile = Paths.get(storagePath, filename).toFile();
+        
+        log.info("Writing tracking info into new file " + outputFile.getAbsolutePath());
         mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, info);
     }
     
     private String createFilename(LocalDateTime timestamp) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd--HH-mm-ss");
-        return formatter.format(timestamp) + ".json";
+        return FORMATTER.format(timestamp) + ".json";
     }
     
     private void ensureStorageIsWritable() {
